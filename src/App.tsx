@@ -58,8 +58,8 @@ function ImageCard() {
           >
             <CardContent>
               <Stack gap={1}>
-                <Chip label="Sky" />
-                <Chip label="Mountain" />
+                <Chip clickable label="Sky" />
+                <Chip clickable label="Mountain" />
               </Stack>
             </CardContent>
             <CardActions
