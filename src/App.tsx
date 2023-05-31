@@ -22,15 +22,20 @@ import { QueryListEditor } from "./QueryListEditor";
 import { StackGrid, useStackGrid } from "./StackGrid";
 import { ManagedModal, AppBarTitle as Title } from "./generic/Modal";
 
-const demoLink =
-  "https://images.unsplash.com/photo-1614597396930-cd6760b99f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80";
+const images = [
+  "https://images.unsplash.com/photo-1614597396930-cd6760b99f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+  "https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=872&q=80",
+  "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
+  "https://images.unsplash.com/photo-1505855265981-d52719d1f64e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80",
+];
 
-function ImageCard() {
+function ImageCard({ image }: { image?: string }) {
   const ref = useRef(null);
   const isHover = useHover(ref);
 
   const stackGrid = useStackGrid();
-  const [dims, state] = useImageSize(demoLink);
+  const [dims, state] = useImageSize(image ?? "");
   useEffect(
     () => void delay(() => stackGrid?.updateLayout(), 300),
     [state.loading, stackGrid]
@@ -43,7 +48,7 @@ function ImageCard() {
         sx={{
           borderRadius: 4,
           aspectRatio: (dims?.width ?? 1) / (dims?.height ?? 1),
-          backgroundImage: `url(${demoLink})`,
+          backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           boxShadow: "none",
         }}
@@ -115,8 +120,8 @@ function App() {
             columnWidth={390}
             style={{ width: "80vw", margin: "auto" }}
           >
-            {range(8).map((k) => (
-              <ImageCard key={k} />
+            {images.map((k, i) => (
+              <ImageCard key={i} image={k} />
             ))}
           </StackGrid>
         </CssBaseline>
