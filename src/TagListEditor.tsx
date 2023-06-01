@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import { debounce } from "lodash";
-import { QueryEditor } from "./QueryEditor";
+import { TagEditor } from "./TagEditor";
 import { ListEditor } from "./generic/ListEditor";
 import { ImageTag } from "./types";
 
-export function QueryListEditor() {
+export function TagListEditor() {
   return (
     <Box sx={{ overflow: "auto hidden", width: "100%" }}>
       <Box sx={{ mb: 2 }}>
@@ -13,7 +13,7 @@ export function QueryListEditor() {
           value={[]}
           useDelete
           useEdit={false}
-          editor={(v) => <QueryEditor value={v} />}
+          editor={(v) => <TagEditor value={v} />}
           create={() => ({
             tag: "person",
             count: 1,

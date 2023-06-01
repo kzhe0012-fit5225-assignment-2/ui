@@ -1,6 +1,7 @@
 import { Divider, TextField } from "@mui/material";
 import { Flex } from "./generic/Flex";
 import { ImageTag } from "./types";
+import { Space } from "./generic/Space";
 
 type QueryEditorProps = {
   value: ImageTag;
@@ -8,7 +9,7 @@ type QueryEditorProps = {
   properties?: string[];
 };
 
-export function QueryEditor({
+export function TagEditor({
   value,
   onValueChange: onChange,
 }: QueryEditorProps) {
@@ -24,7 +25,7 @@ export function QueryEditor({
         onChange={(e) => handleChange({ tag: e.target.value })}
         value={value.tag}
       />
-      <Divider flexItem orientation="vertical" sx={{ mx: 2 }} />
+      <Space />
       <TextField
         label="Count"
         placeholder="Count"
