@@ -24,10 +24,10 @@ import {
   alpha,
   createTheme,
 } from "@mui/material";
-import { delay } from "lodash";
+import { delay, min } from "lodash";
 import { useEffect, useRef } from "react";
 import { useImageSize } from "react-image-size";
-import { useHover } from "usehooks-ts";
+import { useHover, useWindowSize } from "usehooks-ts";
 import "./App.css";
 import { StackGrid, useStackGrid } from "./StackGrid";
 import { TagListEditor } from "./TagListEditor";
@@ -120,6 +120,7 @@ function ImageCard({ image }: { image?: string }) {
 const theme = createTheme({ palette: { mode: "dark" } });
 
 function App() {
+  const { width } = useWindowSize();
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -138,45 +139,48 @@ function App() {
           <Box sx={{ pt: 16 }}>
             <h1>{images.length} Images</h1>
           </Box>{" "}
-          <Button
-            variant="contained"
-            startIcon={<AddOutlined />}
-            sx={{ mb: 4, mr: 2 }}
-          >
-            Upload
-          </Button>
-          <ManagedModal
-            appBar={{ children: <Title>Filter by Tags</Title> }}
-            trigger={(open) => (
-              <Button
-                variant="contained"
-                startIcon={<FilterListOutlined />}
-                onClick={open}
-                sx={{ mb: 4, mr: 2 }}
-              >
-                Filter by Tags
-              </Button>
-            )}
-          >
-            <Box sx={{ maxWidth: 500, margin: "auto", p: 2.5 }}>
-              <TagListEditor />
-            </Box>
-          </ManagedModal>
-          <Button
-            variant="contained"
-            startIcon={<ImageOutlined />}
-            sx={{ mb: 4 }}
-          >
-            Filter by Image
-          </Button>
+          <Box sx={{ mb: 3, mx: 4 }}>
+            <Button
+              variant="contained"
+              startIcon={<AddOutlined />}
+              sx={{ m: 1 }}
+            >
+              Upload
+            </Button>
+            <ManagedModal
+              appBar={{ children: <Title>Filter by Tags</Title> }}
+              trigger={(open) => (
+                <Button
+                  variant="contained"
+                  startIcon={<FilterListOutlined />}
+                  onClick={open}
+                  sx={{ m: 1 }}
+                >
+                  Filter by Tags
+                </Button>
+              )}
+            >
+              <Box sx={{ maxWidth: 500, margin: "auto", p: 2.5 }}>
+                <TagListEditor />
+              </Box>
+            </ManagedModal>
+            <Button
+              variant="contained"
+              startIcon={<ImageOutlined />}
+              sx={{ m: 1 }}
+            >
+              Filter by Image
+            </Button>
+          </Box>
           <StackGrid
-            columnWidth={360}
+            columnWidth={min([360, 0.8 * width]) ?? 1}
             style={{ width: "80vw", margin: "auto" }}
           >
             {images.map((k, i) => (
               <ImageCard key={i} image={k} />
             ))}
           </StackGrid>
+          <Box sx={{ p: 4 }}></Box>
         </CssBaseline>
       </ThemeProvider>
     </>
