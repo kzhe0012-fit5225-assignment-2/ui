@@ -20,19 +20,18 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Stack,
   alpha,
   createTheme,
 } from "@mui/material";
 import { delay, min } from "lodash";
 import { useEffect, useRef } from "react";
 import { useImageSize } from "react-image-size";
+import { Parallax } from "react-parallax";
 import { useHover, useWindowSize } from "usehooks-ts";
 import "./App.css";
 import { StackGrid, useStackGrid } from "./StackGrid";
 import { TagListEditor } from "./TagListEditor";
 import { ManagedModal, AppBarTitle as Title } from "./generic/Modal";
-import { Parallax } from "react-parallax";
 
 const images = [
   "https://images.unsplash.com/photo-1614597396930-cd6760b99f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",

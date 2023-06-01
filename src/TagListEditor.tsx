@@ -18,7 +18,7 @@ export function TagListEditor() {
             tag: "person",
             count: 1,
           })}
-          onChange={debounce((v) => {}, 1000)}
+          onChange={debounce((_v) => {}, 1000)}
           addItemLabel="Tag"
           placeholderText="Click the button below to add a tag."
         />

@@ -1,7 +1,7 @@
-import { Divider, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { Flex } from "./generic/Flex";
-import { ImageTag } from "./types";
 import { Space } from "./generic/Space";
+import { ImageTag } from "./types";
 
 type QueryEditorProps = {
   value: ImageTag;
