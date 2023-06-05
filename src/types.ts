@@ -3,6 +3,13 @@
 export interface Req {}
 
 export interface UploadImageRequest extends Req {
+  /**
+   * Base-64 encoded image.
+   */
+  image: string;
+}
+
+export interface GetImageInfoRequest extends Req {
   url: string;
 }
 
@@ -63,6 +70,8 @@ export type Query<T extends Req, U extends Res> = { req: T; res: U };
 export type ListAllImagesQuery = Query<ListAllImagesRequest, ImageListResponse>;
 
 export type UploadImageQuery = Query<UploadImageRequest, ImageResponse>;
+
+export type GetImageInfoQuery = Query<GetImageInfoRequest, ImageResponse>;
 
 export type EditTagsQuery = Query<EditTagsRequest, ImageResponse>;
 

@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^4.6.4",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.3",
+    "aws-amplify": "^5.2.4",
+    "aws-sdk": "^2.1390.0",
     "comlink": "^4.4.1",
     "css-element-queries": "^1.2.3",
     "lodash": "^4.17.21",
