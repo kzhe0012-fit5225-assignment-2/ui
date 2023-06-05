@@ -35,7 +35,7 @@ console.log(defaultDarkModeOverride);
 const theme = createTheme({
   name: "dark",
   overrides: [defaultDarkModeOverride],
-  tokens: defaultDarkModeOverride.tokens,
+  tokens: defaultDarkModeOverride.tokens as any,
 });
 
 export function AppWithAuth() {
