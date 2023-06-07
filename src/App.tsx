@@ -65,7 +65,7 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
 
   const [query, setQuery] = useState<Query>(defaultQuery);
   const [[currentQuery, results], setResults] = useState<[Query, any[]]>([
-    query,
+    { type: "", payload: {} },
     [],
   ]);
 
@@ -88,7 +88,7 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
   const enqueue = useSnackbar();
   const { width } = useWindowSize();
   return (
-    <Box sx={{ my: -8 }}>
+    <Box sx={{ my: -8, minHeight: "100vh" }}>
       <AppBar signOut={signOut} user={user} />
       <Divider />
       <Box sx={{ pt: 16 }}>
