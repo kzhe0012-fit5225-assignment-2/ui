@@ -35,7 +35,7 @@ export function TagEditor({
           minWidth: 140,
         }}
         onChange={(e) =>
-          handleChange({ count: max([+e.target.value || 0, 0]) })
+          handleChange({ count: max([+e.target.value || 1, 1]) })
         }
         value={`${value.count}`}
       />
