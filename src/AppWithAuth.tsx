@@ -15,6 +15,7 @@ Amplify.configure(config);
 
 const AppWithAuthBase = withAuthenticator(App, {
   socialProviders: ["google"],
+  signUpAttributes: ["family_name", "given_name"],
   variation: "default",
   components: {
     Header() {
@@ -30,8 +31,6 @@ const AppWithAuthBase = withAuthenticator(App, {
   },
 });
 
-console.log(defaultDarkModeOverride);
-
 const theme = createTheme({
   name: "dark",
   overrides: [defaultDarkModeOverride],
@@ -41,7 +40,9 @@ const theme = createTheme({
 export function AppWithAuth() {
   return (
     <ThemeProvider theme={theme}>
-      <AppWithAuthBase />
+      <Box sx={{ py: 8 }}>
+        <AppWithAuthBase />
+      </Box>
     </ThemeProvider>
   );
 }

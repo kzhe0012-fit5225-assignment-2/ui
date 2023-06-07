@@ -320,10 +320,9 @@ export default function Editor<T>(props: Props<T>) {
           </Typography>
         </Box>
       </Collapse>
-      <Box p={2} mb={-3}>
+      <Box p={2} mb={-2} mt={-2}>
         <Button
           disableElevation
-          variant="contained"
           startIcon={<Add />}
           color="primary"
           onClick={() => {

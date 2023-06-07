@@ -1,16 +1,18 @@
+export const apiName = "FIT5225ass2";
+
 export const config = {
   Auth: {
     // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-    identityPoolId: "ap-southeast-2:8983d328-a70c-4f43-85c3-107afd6ac37b",
+    identityPoolId: "us-east-1:b4f0844e-263f-432e-b8c7-2af78371ba8c",
 
     // REQUIRED - Amazon Cognito Region
-    region: "ap-southeast-2",
+    region: "us-east-1",
 
     // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: "ap-southeast-2_jo1SFXrMl",
+    userPoolId: "us-east-1_scLARNQR0",
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: "4qjpo96ksdn8574jf3vulg255d",
+    userPoolWebClientId: "4vblvrfskq4ujijichue5rcmr1",
 
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
     mandatorySignIn: true,
@@ -24,11 +26,19 @@ export const config = {
 
     // OPTIONAL - Hosted UI configuration
     oauth: {
-      domain: "ass2.auth.ap-southeast-2.amazoncognito.com",
-      redirectSignIn: window.location.href,
-      redirectSignOut: window.location.href,
-      responseType: "token", // or 'token', note that REFRESH token will only be generated when the responseType is code
-      //   scope: ["email"],
+      domain: "5225-ass2-pool.auth.us-east-1.amazoncognito.com",
+      redirectSignIn: window.location.origin + window.location.pathname,
+      redirectSignOut: window.location.origin + window.location.pathname,
+      responseType: "code", // or 'token', note that REFRESH token will only be generated when the responseType is code
     },
+  },
+  API: {
+    endpoints: [
+      {
+        name: apiName, // (required) - API Name (This name is used used in the client app to identify the API - API.get('your-api-name', '/path'))
+        endpoint: "https://4c15jwrdf3.execute-api.us-east-1.amazonaws.com/dev", // (required) -API Gateway URL + environment
+        region: "us-east-1", // (required) - API Gateway region
+      },
+    ],
   },
 };

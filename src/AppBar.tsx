@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Typography,
 } from "@mui/material";
 
 export function AppBar({
@@ -15,6 +16,18 @@ export function AppBar({
   signOut?: () => void;
   user?: any;
 }) {
+  const name = user?.attributes ? (
+    <>
+      <Typography component="span" sx={{ pr: 1 }}>
+        {user?.attributes?.given_name} {user?.attributes?.family_name}
+      </Typography>
+      <Typography component="span" color="textSecondary">
+        {user?.attributes?.email}
+      </Typography>
+    </>
+  ) : (
+    user?.username
+  );
   return (
     <List>
       <ListItem>
@@ -24,7 +37,7 @@ export function AppBar({
           </Avatar>
         </ListItemAvatar>
         <ListItemText>
-          {user?.attributes?.email ?? user?.username}
+          {name}
           <Button variant="text" onClick={signOut}>
             Sign Out
           </Button>

@@ -2,6 +2,7 @@ import { TextField } from "@mui/material";
 import { Flex } from "./generic/Flex";
 import { Space } from "./generic/Space";
 import { ImageTag } from "./types";
+import { max } from "lodash";
 
 type QueryEditorProps = {
   value: ImageTag;
@@ -33,8 +34,10 @@ export function TagEditor({
         sx={{
           minWidth: 140,
         }}
-        onChange={(e) => handleChange({ count: +e || 1 })}
-        value={value.count}
+        onChange={(e) =>
+          handleChange({ count: max([+e.target.value || 0, 0]) })
+        }
+        value={`${value.count}`}
       />
     </Flex>
   );

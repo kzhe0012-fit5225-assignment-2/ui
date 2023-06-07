@@ -7,6 +7,7 @@ export interface UploadImageRequest extends Req {
    * Base-64 encoded image.
    */
   image: string;
+  format: string;
 }
 
 export interface GetImageInfoRequest extends Req {

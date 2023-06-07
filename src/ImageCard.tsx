@@ -7,25 +7,29 @@ import {
   CardContent,
   Chip,
   Fade,
+  Tooltip,
+  Typography,
   alpha,
 } from "@mui/material";
-import { delay } from "lodash";
+import { Dictionary, delay, entries, startCase } from "lodash";
+import pluralize from "pluralize";
 import { useEffect, useRef } from "react";
 import { useImageSize } from "react-image-size";
 import { Parallax } from "react-parallax";
+import Tilt from "react-parallax-tilt";
 import { useHover } from "usehooks-ts";
 import { useStackGrid } from "./StackGrid";
-import Tilt from "react-parallax-tilt";
 
-export const images = [
-  "https://images.unsplash.com/photo-1614597396930-cd6760b99f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",
-  "https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",
-  "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280q=80",
-  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",
-  "https://images.unsplash.com/photo-1505855265981-d52719d1f64e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80",
-];
-export function ImageCard({ image }: { image?: string }) {
+export function ImageCard({
+  image,
+  tags = {},
+  setQuery,
+}: {
+  image?: string;
+  tags?: Dictionary<number>;
+  author?: string;
+  setQuery?: (type: string, payload: any) => void;
+}) {
   const ref = useRef(null);
   const isHover = useHover(ref);
 
@@ -91,10 +95,32 @@ export function ImageCard({ image }: { image?: string }) {
                 }}
               >
                 <CardContent>
-                  <Chip sx={{ p: 2.5, m: 0.5 }} clickable label="Landscape" />
-                  <Chip sx={{ p: 2.5, m: 0.5 }} clickable label="Clouds" />
-                  <Chip sx={{ p: 2.5, m: 0.5 }} clickable label="Sky" />
-                  <Chip sx={{ p: 2.5, m: 0.5 }} clickable label="Mountain" />
+                  {entries(tags).length ? (
+                    entries(tags).map(([k, v]) => (
+                      <Tooltip
+                        title={`See Images with At Least ${pluralize(
+                          startCase(k),
+                          v,
+                          true
+                        )}`}
+                      >
+                        <Chip
+                          sx={{ p: 2.5, m: 0.5 }}
+                          clickable
+                          onClick={() =>
+                            setQuery?.("find-image-by-tags", {
+                              tags: [{ tag: k, count: v }],
+                            })
+                          }
+                          label={pluralize(startCase(k), v, true)}
+                        />
+                      </Tooltip>
+                    ))
+                  ) : (
+                    <Typography sx={{ p: 2 }} color="textSecondary">
+                      This image has no tags
+                    </Typography>
+                  )}
                 </CardContent>
                 <CardActions
                   sx={{

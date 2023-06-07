@@ -12,13 +12,16 @@ import "overlayscrollbars/overlayscrollbars.css";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { OverlayScrollbars } from "overlayscrollbars";
 import { AppWithAuth } from "./AppWithAuth";
+import { SnackbarProvider } from "./generic/Snackbar";
 
 const theme = createTheme({ palette: { mode: "dark" } });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider theme={theme}>
     <CssBaseline>
-      <AppWithAuth />
+      <SnackbarProvider>
+        <AppWithAuth />
+      </SnackbarProvider>
     </CssBaseline>
   </ThemeProvider>
 );
