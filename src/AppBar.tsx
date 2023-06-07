@@ -29,19 +29,30 @@ export function AppBar({
     user?.username
   );
   return (
-    <List>
+    <List sx={{ maxWidth: "100vw" }}>
       <ListItem>
         <ListItemAvatar>
           <Avatar>
             <PersonOutline />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText>
+        <ListItemText
+          sx={{
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            maxWidth: "min-content",
+          }}
+        >
           {name}
-          <Button variant="text" onClick={signOut}>
-            Sign Out
-          </Button>
         </ListItemText>
+        <Button
+          variant="text"
+          onClick={signOut}
+          sx={{ flex: 0, minWidth: "max-content" }}
+        >
+          Sign Out
+        </Button>
       </ListItem>
     </List>
   );

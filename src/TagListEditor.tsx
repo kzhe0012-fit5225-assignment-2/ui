@@ -41,7 +41,7 @@ export function TagListEditor({
         startIcon={<CheckOutlined />}
         onClick={() => onApply?.(value)}
       >
-        Apply Filter
+        Apply
       </Button>
     </Box>
   );

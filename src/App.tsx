@@ -11,10 +11,10 @@ import {
   CircularProgress,
   Divider,
   Typography,
+  Badge,
 } from "@mui/material";
-import { API, Auth } from "aws-amplify";
 import { fileDialog as file } from "file-select-dialog";
-import { cloneDeep, isEmpty, map, min } from "lodash";
+import { cloneDeep, isEmpty, map, min, startCase } from "lodash";
 import pluralize from "pluralize";
 import { useCallback, useEffect, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
@@ -23,9 +23,9 @@ import { AppBar } from "./AppBar";
 import { ImageCard } from "./ImageCard";
 import { StackGrid } from "./StackGrid";
 import { TagListEditor } from "./TagListEditor";
-import { apiName as api } from "./config";
 import { ManagedModal, AppBarTitle as Title } from "./generic/Modal";
 import { useSnackbar } from "./generic/Snackbar";
+import { call } from "./call";
 
 function ext(s: string) {
   return s.split(".").pop();
@@ -39,18 +39,6 @@ const toBase64 = (file: File) =>
       resolve(`${reader.result}`.replace(/^data:image\/[a-z]+;base64,/, ""));
     reader.onerror = reject;
   });
-
-const call = async (path: string, body: any) => {
-  const token = (await Auth.currentSession()).getIdToken().getJwtToken();
-  return await API.post(api, path, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      Authorization: "Bearer " + token,
-    },
-    body,
-  });
-};
 
 const defaultQuery = {
   type: "find-image-by-tags",
@@ -79,6 +67,7 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
       setResults([query, results]);
     });
   }, [query]);
+
   // Polling
   useEffect(() => {
     const interval = setInterval(refresh, 10000);
@@ -87,22 +76,23 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
 
   const enqueue = useSnackbar();
   const { width } = useWindowSize();
+  const loading = query !== currentQuery;
   return (
     <Box sx={{ my: -8, minHeight: "100vh" }}>
       <AppBar signOut={signOut} user={user} />
       <Divider />
       <Box sx={{ pt: 16 }}>
         <h1>
-          {query === currentQuery ? (
+          {!loading ? (
             <>
               {pluralize("Image", (results ?? []).length, true)}{" "}
               {!isEmpty(query.payload)
                 ? query.type === "find-image-by-tags" &&
                   !isEmpty(query.payload.tags)
                   ? `with ${map(query.payload.tags, ({ count, tag }) =>
-                      pluralize(tag, count, true)
+                      pluralize(startCase(tag), count, true)
                     ).join(", ")}`
-                  : ""
+                  : "Similar"
                 : ""}
             </>
           ) : (
@@ -126,7 +116,7 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
                 image: await toBase64(f),
                 type: ext(f.name),
               });
-              enqueue(`Uploaded ${f.name}, detection results show up soon`);
+              enqueue(`Uploaded ${f.name}, detection results show up soon.`);
             }
           }}
         >
@@ -137,16 +127,24 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
             children: <Title>Filter by Tags</Title>,
           }}
           trigger={(open) => (
-            <Button
-              variant="contained"
-              startIcon={<FilterListOutlined />}
-              onClick={open}
-              sx={{
-                m: 1,
-              }}
+            <Badge
+              variant="dot"
+              badgeContent={
+                +(
+                  query.type === "find-image-by-tags" && !isEmpty(query.payload)
+                )
+              }
+              color="secondary"
+              sx={{ m: 1 }}
             >
-              Filter by Tags
-            </Button>
+              <Button
+                variant="contained"
+                startIcon={<FilterListOutlined />}
+                onClick={open}
+              >
+                Filter by Tags
+              </Button>
+            </Badge>
           )}
         >
           {({ close }) => (
@@ -174,9 +172,36 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
             </Box>
           )}
         </ManagedModal>
-        <Button variant="contained" startIcon={<ImageOutlined />} sx={{ m: 1 }}>
-          Filter by Image
-        </Button>
+        <Badge
+          variant="dot"
+          badgeContent={
+            +(query.type === "find-image-by-image" && !isEmpty(query.payload))
+          }
+          color="secondary"
+          sx={{ m: 1 }}
+        >
+          <Button
+            variant="contained"
+            startIcon={<ImageOutlined />}
+            onClick={async () => {
+              const f = await file({
+                accept: [".jpg", ".png"],
+                strict: true,
+              });
+              if (f) {
+                setQuery({
+                  type: "find-image-by-image",
+                  payload: {
+                    image: await toBase64(f),
+                    type: ext(f.name),
+                  },
+                });
+              }
+            }}
+          >
+            Filter by Image
+          </Button>
+        </Badge>
         {!isEmpty(query.payload) && (
           <Button
             variant="text"
@@ -204,16 +229,22 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
           {(results ?? []).map(({ key, url, tags, author }) => (
             <ImageCard
               key={key}
+              imageKey={key}
               image={url}
               tags={tags}
               author={author}
               setQuery={(type, payload) => setQuery({ type, payload })}
+              refresh={refresh}
             />
           ))}
         </StackGrid>
       ) : (
         <Typography sx={{ p: 8 }} color="textSecondary">
-          You have no images. Click + UPLOAD to upload a new image.
+          {!loading
+            ? isEmpty(query.payload)
+              ? "You have no images. Click + UPLOAD to upload a new image."
+              : "No images match the criteria."
+            : "Checking for new images..."}
         </Typography>
       )}
       <Box sx={{ p: 4 }}></Box>
