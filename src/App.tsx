@@ -26,6 +26,7 @@ import { TagListEditor } from "./TagListEditor";
 import { ManagedModal, AppBarTitle as Title } from "./generic/Modal";
 import { useSnackbar } from "./generic/Snackbar";
 import { call } from "./call";
+import { validateImage } from "image-validator";
 
 function ext(s: string) {
   return s.split(".").pop();
@@ -111,6 +112,10 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
               strict: true,
             });
             if (f) {
+              if (!(await validateImage(f))) {
+                enqueue(`${f.name} does not appear valid.`);
+                return;
+              }
               enqueue("Uploading...");
               await call("/upload-to-s3", {
                 image: await toBase64(f),
@@ -189,6 +194,10 @@ function App({ signOut, user }: { signOut?: () => void; user?: any }) {
                 strict: true,
               });
               if (f) {
+                if (!(await validateImage(f))) {
+                  enqueue(`${f.name} does not appear valid.`);
+                  return;
+                }
                 setQuery({
                   type: "find-image-by-image",
                   payload: {
